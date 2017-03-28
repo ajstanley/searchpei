@@ -1,0 +1,78 @@
+<?php
+
+/**
+ * @file
+ * Miscellaneous hook implementations.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function searchpei_menu() {
+
+  $items = array();
+  $items['searchpei/import_pdf'] = array(
+    'title' => 'Import PDFs',
+    'description' => 'Imports PDF structure',
+    'type' => MENU_NORMAL_ITEM,
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('searchpei_import_data_form'),
+    'file' => 'includes/searchpei.inc',
+    'access arguments' => array('access content'),
+  );
+  return $items;
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function searchpei_block_info() {
+  $blocks = array();
+  $blocks['pid_selector'] = array(
+    'info' => t('Select Node by PID'),
+  );
+
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_configure().
+ */
+function searchpei_block_view($delta = '') {
+  $block = array();
+  switch ($delta) {
+    case 'pid_selector' :
+      $block['subject'] = t('Select Property by PID');
+      $block['content'] = drupal_get_form('PID_form');
+      break;
+  }
+  return $block;
+}
+
+/**
+ * Custom form.
+ */
+function PID_form($form, &$form_state) {
+  $form['PID'] = array(
+    '#type' => 'textfield',
+   // '#title' => t('PID to find'),
+    '#size' => 12,
+  );
+
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Go to property record'),
+  );
+
+  return $form;
+}
+
+/**
+ * Custom form submit function.
+ */
+function PID_form_submit($form, &$form_state) {
+  module_load_include('inc', 'searchpei', 'includes/utilities');
+  $pid = $form_state['values']['PID'];
+  $path = searchpei_get_address($pid);
+  drupal_goto($path);
+}

@@ -1,0 +1,7 @@
+name = SearchPEI 
+description = access Land Title Searches
+core = 7.x
+dependencies[] = file_entity
+dependencies[] = entityreference
+package = Agile Humanities
+version = 7.x-1.0

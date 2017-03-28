@@ -1,0 +1,39 @@
+<?php
+
+/**
+ * @file
+ * Install hooks for this module.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function searchpei_schema() {
+  $schema = array();
+  $schema['searchpei_imports'] = array(
+    'description' => 'Records metadata migrated from FIle system.',
+    'fields' => array(
+      'filename' => array(
+        'description' => 'File title',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
+      'collection' => array(
+        'description' => 'Collection title.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      ),
+      'NID' => array(
+        'description' => 'NID of object created from this record.',
+        'default' => 'uningested',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      ),
+    ),
+    'primary key' => array('filename', 'collection'),
+  );
+  return $schema;
+}
